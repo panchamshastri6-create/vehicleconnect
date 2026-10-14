@@ -1,0 +1,103 @@
+CREATE DATABASE IF NOT EXISTS vehicleconnect_qr CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE vehicleconnect_qr;
+
+CREATE TABLE IF NOT EXISTS admins (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(80) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS partners (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  phone VARCHAR(20) NULL,
+  active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS customers (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  full_name VARCHAR(150) NOT NULL,
+  mobile VARCHAR(20) NOT NULL,
+  whatsapp VARCHAR(20) NULL,
+  address TEXT NOT NULL,
+  locality VARCHAR(120) NULL,
+  city VARCHAR(100) NOT NULL,
+  state VARCHAR(100) NOT NULL DEFAULT 'Gujarat',
+  pincode VARCHAR(10) NOT NULL,
+  vehicle_type VARCHAR(30) NOT NULL,
+  vehicle_registration VARCHAR(30) NULL,
+  public_name_consent TINYINT(1) NOT NULL DEFAULT 0,
+  public_phone_consent TINYINT(1) NOT NULL DEFAULT 0,
+  whatsapp_consent TINYINT(1) NOT NULL DEFAULT 0,
+  consent_at DATETIME NULL,
+  active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_customer_mobile (mobile)
+);
+
+CREATE TABLE IF NOT EXISTS qr_profiles (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  customer_id BIGINT NOT NULL,
+  public_id CHAR(32) NOT NULL UNIQUE,
+  active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (customer_id) REFERENCES customers(id)
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  order_number VARCHAR(30) NOT NULL UNIQUE,
+  customer_id BIGINT NOT NULL,
+  partner_id INT NULL,
+  quantity INT NOT NULL DEFAULT 1,
+  unit_price INT NOT NULL DEFAULT 400,
+  delivery_charge INT NOT NULL DEFAULT 0,
+  total_amount INT NOT NULL,
+  payment_method ENUM('COD','RAZORPAY') NOT NULL DEFAULT 'COD',
+  payment_status ENUM('PENDING','PAID','FAILED','REFUNDED') NOT NULL DEFAULT 'PENDING',
+  order_status ENUM('PENDING','CONFIRMED','PROCESSING','READY_TO_DISPATCH','SHIPPED','DELIVERED','CANCELLED','REFUNDED') NOT NULL DEFAULT 'PENDING',
+  razorpay_order_id VARCHAR(100) NULL,
+  razorpay_payment_id VARCHAR(100) NULL,
+  commission_status ENUM('PENDING','APPROVED','PAID','CANCELLED') NOT NULL DEFAULT 'PENDING',
+  notes TEXT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (customer_id) REFERENCES customers(id),
+  FOREIGN KEY (partner_id) REFERENCES partners(id),
+  INDEX idx_orders_status (order_status),
+  INDEX idx_orders_created (created_at)
+);
+
+CREATE TABLE IF NOT EXISTS order_status_history (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  order_id BIGINT NOT NULL,
+  old_status VARCHAR(40) NULL,
+  new_status VARCHAR(40) NOT NULL,
+  note VARCHAR(255) NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (order_id) REFERENCES orders(id)
+);
+
+CREATE TABLE IF NOT EXISTS consent_records (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  customer_id BIGINT NOT NULL,
+  consent_type VARCHAR(60) NOT NULL,
+  granted TINYINT(1) NOT NULL,
+  consent_text VARCHAR(500) NOT NULL,
+  recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (customer_id) REFERENCES customers(id)
+);
+
+CREATE TABLE IF NOT EXISTS audit_logs (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  admin_id INT NULL,
+  action VARCHAR(100) NOT NULL,
+  entity_type VARCHAR(60) NOT NULL,
+  entity_id VARCHAR(80) NULL,
+  details TEXT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (admin_id) REFERENCES admins(id)
+);
