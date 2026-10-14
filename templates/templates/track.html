@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Track Order | {{ business_name }}{% endblock %}
+{% block content %}
+<section class="section container narrow">
+  <div class="form-card">
+    <div class="eyebrow">ORDER SUPPORT</div><h1>Track your order</h1><p>Enter your order number and the mobile number used at checkout.</p>
+    <form method="post">
+      <label class="field">Order number<input name="order_number" required placeholder="e.g. VC261012ABC123"></label>
+      <label class="field">Mobile number<input name="mobile" required inputmode="tel" placeholder="Mobile number used for the order"></label>
+      <button class="btn btn-primary btn-block" type="submit">Find my order</button>
+    </form>
+    {% if result %}
+    <div class="track-result">
+      <div class="summary-row"><span>Order</span><b>{{ result.order_number }}</b></div>
+      <div class="summary-row"><span>Status</span><b class="status-pill">{{ result.order_status.replace('_',' ') }}</b></div>
+      <div class="summary-row"><span>Payment</span><b>{{ result.payment_status }}</b></div>
+      <div class="summary-row"><span>Quantity</span><b>{{ result.quantity }}</b></div>
+      <div class="summary-row"><span>Total</span><b>₹{{ result.total_amount }}</b></div>
+      <small>For changes or delivery questions, contact the business support number.</small>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

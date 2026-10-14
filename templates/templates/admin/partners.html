@@ -1,0 +1,10 @@
+{% extends "admin/base.html" %}
+{% block title %}Partners · {{ business_name }}{% endblock %}
+{% block content %}
+<div class="admin-title-row"><div><div class="eyebrow">SALES PARTNERS</div><h1>Partners & commissions</h1><p>Default commission: ₹{{ commission }} per sticker. Review eligible orders before paying.</p></div></div>
+<div class="detail-grid">
+<form class="form-card" method="post"><h2>Add a partner</h2><label class="field">Partner name <span>*</span><input name="name" required></label><label class="field">Mobile number<input name="phone"></label><button class="btn btn-primary">Add partner</button></form>
+<div class="notice notice-info"><strong>Commission workflow</strong><p>Assign a partner to an order during order entry or by extending the order workflow. Commission reporting is based on recorded partner-linked orders. Review cancelled/refunded orders before payouts.</p><p>Current starter version records partner assignment at public checkout through the optional partner ID field. For manual orders, partner assignment can be added in a later iteration.</p></div>
+</div>
+<div class="panel"><div class="table-wrap"><table><thead><tr><th>Partner</th><th>Orders</th><th>Units</th><th>Approved/paid commission estimate</th><th>Action</th></tr></thead><tbody>{% for p in partners %}<tr><td><b>{{ p.name }}</b><small>{{ p.phone or 'No phone' }}</small></td><td>{{ p.order_count }}</td><td>{{ p.units }}</td><td>₹{{ p.approved_commission }}</td><td><form method="post" action="{{ url_for('admin_partner_paid',partner_id=p.id) }}"><button class="mini-btn">Mark approved commissions paid</button></form></td></tr>{% else %}<tr><td colspan="5" class="empty">No partners added.</td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}

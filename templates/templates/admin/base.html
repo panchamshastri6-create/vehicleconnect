@@ -1,0 +1,7 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Admin · {{ business_name }}{% endblock %}</title><link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}"></head>
+<body class="admin-body">
+<header class="admin-header"><div class="container admin-nav"><a class="brand" href="{{ url_for('admin_dashboard') }}"><span class="brand-mark">V</span><span>{{ business_name }} <small>ADMIN</small></span></a>
+{% if session.get('admin_id') %}<nav><a href="{{ url_for('admin_dashboard') }}">Dashboard</a><a href="{{ url_for('admin_customers') }}">Customers</a><a href="{{ url_for('admin_orders') }}">Orders</a><a href="{{ url_for('admin_partners') }}">Partners</a><a href="{{ url_for('admin_settings') }}">Settings</a><a href="{{ url_for('admin_logout') }}">Log out</a></nav>{% endif %}</div></header>
+<main class="container admin-main"><div class="flash-area">{% with messages=get_flashed_messages(with_categories=true) %}{% if messages %}{% for category,message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}</div>{% block content %}{% endblock %}</main>
+</body></html>

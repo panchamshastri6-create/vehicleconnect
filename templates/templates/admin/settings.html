@@ -1,0 +1,13 @@
+{% extends "admin/base.html" %}
+{% block title %}Settings · {{ business_name }}{% endblock %}
+{% block content %}
+<div class="admin-title-row"><div><div class="eyebrow">BUSINESS CONFIGURATION</div><h1>Settings overview</h1><p>These values currently come from your local .env file.</p></div></div>
+<div class="settings-grid">
+<div class="setting-card"><span>Sticker price</span><strong>₹{{ price }}</strong><small>PRODUCT_PRICE</small></div>
+<div class="setting-card"><span>Partner commission</span><strong>₹{{ commission }}</strong><small>PARTNER_COMMISSION_PER_STICKER</small></div>
+<div class="setting-card"><span>Free-delivery city</span><strong>{{ free_city }}</strong><small>City and configured PIN must both match</small></div>
+<div class="setting-card"><span>Other delivery charge</span><strong>₹{{ delivery }}</strong><small>DEFAULT_OTHER_DELIVERY_CHARGE</small></div>
+<div class="setting-card"><span>Online payment</span><strong>{{ 'Configured' if razorpay_enabled else 'Not configured' }}</strong><small>Razorpay keys in .env</small></div>
+</div>
+<div class="panel settings-help"><h2>Change settings</h2><p>Stop the server, edit your <code>.env</code> file, save it, then restart the server. Verify delivery PIN codes with your courier before advertising free delivery. Keep secrets out of source control.</p><p><code>FREE_DELIVERY_PIN_CODES=380001,380002,...</code></p><p>For QR codes that work for customers outside your PC, change <code>BASE_URL</code> to your public HTTPS domain after deployment.</p></div>
+{% endblock %}

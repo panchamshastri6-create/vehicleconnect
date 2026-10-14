@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Order received | {{ business_name }}{% endblock %}
+{% block content %}
+<section class="section container narrow">
+  <div class="success-card">
+    <div class="success-mark">✓</div><div class="eyebrow">ORDER RECEIVED</div>
+    <h1>Thanks, {{ order.full_name }}.</h1><p>Your order has been recorded. Keep your order number for tracking.</p>
+    <div class="order-number"><small>YOUR ORDER NUMBER</small><strong>{{ order.order_number }}</strong></div>
+    <div class="summary-row"><span>Quantity</span><b>{{ order.quantity }}</b></div>
+    <div class="summary-row"><span>Total payable</span><b>₹{{ order.total_amount }}</b></div>
+    <div class="summary-row"><span>Payment</span><b>{{ 'Cash on Delivery' if order.payment_method=='COD' else 'Online payment' }}</b></div>
+    <div class="notice notice-info">Your public QR profile is activated only after the order is confirmed/paid by the admin. This prevents unpaid or fraudulent orders from creating active profiles.</div>
+    <a class="btn btn-primary btn-block" href="{{ url_for('track_order') }}">Track your order</a>
+    <a class="text-link" href="{{ url_for('home') }}">Back to home</a>
+  </div>
+</section>
+{% endblock %}

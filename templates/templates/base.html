@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ business_name }}{% endblock %}</title>
+  <meta name="description" content="Personalized vehicle QR contact stickers for cars and bikes.">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a class="brand" href="{{ url_for('home') }}"><span class="brand-mark">V</span><span>{{ business_name }}</span></a>
+    <button class="menu-toggle" type="button" aria-label="Toggle menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+    <nav class="nav-links">
+      <a href="{{ url_for('how_it_works') }}">How it works</a>
+      <a href="{{ url_for('track_order') }}">Track order</a>
+      <a class="nav-cta" href="{{ url_for('order') }}">Order sticker · ₹400</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <div class="container flash-area">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}{% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}{% endif %}
+    {% endwith %}
+  </div>
+  {% block content %}{% endblock %}
+</main>
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div><a class="brand footer-brand" href="{{ url_for('home') }}"><span class="brand-mark">V</span><span>{{ business_name }}</span></a><p>Simple contact access for your vehicle, one scan at a time.</p></div>
+    <div><strong>Explore</strong><a href="{{ url_for('how_it_works') }}">How it works</a><a href="{{ url_for('track_order') }}">Track order</a><a href="{{ url_for('order') }}">Order sticker</a></div>
+    <div><strong>Policies</strong><a href="{{ url_for('home') }}#privacy">Privacy-first design</a><a href="{{ url_for('admin_login') }}">Admin login</a></div>
+  </div>
+  <div class="container footer-bottom">© {{ business_name }} · Built for responsible vehicle-owner contact.</div>
+</footer>
+</body>
+</html>
