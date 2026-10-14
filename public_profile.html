@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Vehicle Owner Contact | {{ business_name }}{% endblock %}
+{% block content %}
+<section class="section container public-wrap">
+  <div class="public-card">
+    <div class="public-brand"><span class="brand-mark">V</span><span>{{ business_name }}</span></div>
+    <div class="public-icon">↗</div>
+    <div class="eyebrow">VEHICLE OWNER CONTACT</div>
+    <h1>{{ profile.full_name }}</h1>
+    <p class="public-lead">You scanned this vehicle's contact QR. Use the buttons below to reach the owner.</p>
+    <a class="btn btn-primary btn-block call-btn" href="tel:+{{ phone_digits }}">☎ &nbsp; Call vehicle owner</a>
+    {% if profile.whatsapp and profile.whatsapp_consent and whatsapp_digits %}
+    <a class="btn btn-light btn-block" target="_blank" rel="noopener noreferrer" href="https://wa.me/{{ whatsapp_digits }}">Message on WhatsApp</a>
+    {% endif %}
+    <div class="privacy-note"><span>◈</span><p><b>Privacy matters</b><br>The owner's home address is not shown on this page. Please use the contact details responsibly.</p></div>
+    <a class="report-link" href="mailto:{{ support_phone if support_phone and '@' in support_phone else 'support@example.com' }}?subject=QR%20profile%20correction%20request">Report incorrect information</a>
+    <div class="public-foot">This QR code is a contact service, not a live vehicle tracker.</div>
+  </div>
+</section>
+{% endblock %}

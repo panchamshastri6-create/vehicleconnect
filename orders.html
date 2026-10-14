@@ -1,0 +1,13 @@
+{% extends "admin/base.html" %}
+{% block title %}Orders · {{ business_name }}{% endblock %}
+{% block content %}
+<div class="admin-title-row"><div><div class="eyebrow">FULFILMENT</div><h1>Orders</h1><p>Update order and payment status as you process each order.</p></div></div>
+<form class="search-bar" method="get"><input name="q" value="{{ search }}" placeholder="Order number, customer or phone"><select name="status"><option value="">All statuses</option>{% for s in statuses %}<option value="{{ s }}" {% if selected_status==s %}selected{% endif %}>{{ s.replace('_',' ') }}</option>{% endfor %}</select><button class="btn btn-dark">Filter</button></form>
+<div class="panel"><div class="table-wrap"><table><thead><tr><th>Order / customer</th><th>Amount</th><th>Payment</th><th>Order status</th><th>Commission</th><th>Update</th></tr></thead><tbody>
+{% for o in orders %}<tr><td><b>{{ o.order_number }}</b><small>{{ o.full_name }} · {{ o.mobile }}</small><small>{{ o.city }} {{ o.pincode }} · {{ o.quantity }} item(s)</small></td><td>₹{{ o.total_amount }}<small>Delivery ₹{{ o.delivery_charge }}</small></td><td><span class="status-pill">{{ o.payment_method }} / {{ o.payment_status }}</span>
+<form class="mini-form" method="post" action="{{ url_for('admin_order_payment',order_id=o.id) }}"><select name="payment_status">{% for s in ['PENDING','PAID','FAILED','REFUNDED'] %}<option {% if o.payment_status==s %}selected{% endif %}>{{ s }}</option>{% endfor %}</select><button class="mini-btn">Save</button></form></td>
+<td><span class="status-pill">{{ o.order_status.replace('_',' ') }}</span></td><td>{{ o.commission_status }}<small>₹{{ o.quantity * 200 }} estimated</small></td>
+<td><form class="mini-form" method="post" action="{{ url_for('admin_order_status',order_id=o.id) }}"><select name="order_status">{% for s in statuses %}<option value="{{ s }}" {% if o.order_status==s %}selected{% endif %}>{{ s.replace('_',' ') }}</option>{% endfor %}</select><button class="mini-btn">Update</button></form></td></tr>
+{% else %}<tr><td colspan="6" class="empty">No orders found.</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

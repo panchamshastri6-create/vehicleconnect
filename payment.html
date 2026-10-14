@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Online payment | {{ business_name }}{% endblock %}
+{% block content %}
+<section class="section container narrow"><div class="success-card">
+  <div class="eyebrow">SECURE CHECKOUT</div><h1>Complete your payment</h1>
+  <p>Order <strong>{{ order_number }}</strong> · Total <strong>₹{{ total }}</strong></p>
+  <div id="payment-message" class="notice notice-info">Click below to open Razorpay checkout. Your order is not paid until the server verifies the payment.</div>
+  <button id="pay-button" class="btn btn-primary btn-block">Pay ₹{{ total }} securely</button>
+  <a class="text-link" href="{{ url_for('track_order') }}">Track order</a>
+</div></section>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+const payButton=document.getElementById('pay-button');
+payButton.addEventListener('click',function(){
+  if(!window.Razorpay){document.getElementById('payment-message').textContent='Razorpay checkout could not load. Check your internet connection and try again.';return;}
+  const options={
+    key:{{ key_id|tojson }},
+    amount:{{ total * 100 }},
+    currency:'INR',
+    name:{{ business_name|tojson }},
+    description:'Vehicle QR sticker order {{ order_number }}',
+    order_id:{{ rp_order_id|tojson }},
+    prefill:{name:{{ customer.full_name|tojson }},contact:{{ customer.mobile|tojson }}},
+    handler:async function(response){
+      document.getElementById('payment-message').textContent='Verifying payment securely…';
+      const res=await fetch('{{ url_for("payment_verify") }}',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...response,order_number:{{ order_number|tojson }}})});
+      const data=await res.json();
+      if(data.ok){window.location.href=data.redirect;}else{document.getElementById('payment-message').textContent=data.message||'Payment verification failed. Contact support.';}
+    },
+    modal:{ondismiss:function(){document.getElementById('payment-message').textContent='Checkout closed. Your order is not marked as paid.';}}
+  };
+  const rzp=new Razorpay(options);
+  rzp.on('payment.failed',function(){document.getElementById('payment-message').textContent='Payment failed. Your order remains unpaid.';});
+  rzp.open();
+});
+</script>
+{% endblock %}

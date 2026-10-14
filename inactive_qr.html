@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}QR profile unavailable | {{ business_name }}{% endblock %}
+{% block content %}
+<section class="section container narrow"><div class="success-card"><div class="public-icon">i</div><h1>QR profile unavailable</h1><p>This QR profile is currently inactive or the link is invalid.</p><a class="btn btn-primary" href="{{ url_for('home') }}">Go to website</a></div></section>
+{% endblock %}

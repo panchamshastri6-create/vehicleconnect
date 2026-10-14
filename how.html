@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}How It Works | {{ business_name }}{% endblock %}
+{% block content %}
+<section class="page-hero"><div class="container"><div class="eyebrow">THREE SIMPLE STEPS</div><h1>How your QR sticker works</h1><p>A simple contact page connected to a unique QR code.</p></div></section>
+<section class="section container">
+  <div class="steps-grid">
+    <article class="step-card"><span class="step-num">01</span><div class="step-icon">▤</div><h3>Place your order</h3><p>Enter your name, mobile number, vehicle type and delivery address. Your name and phone are displayed only after consent.</p></article>
+    <article class="step-card"><span class="step-num">02</span><div class="step-icon">▦</div><h3>Receive your sticker</h3><p>Your unique QR points to your contact page. Stick it in a visible, safe location on your vehicle.</p></article>
+    <article class="step-card"><span class="step-num">03</span><div class="step-icon">↗</div><h3>Get a call</h3><p>Anyone who scans the sticker can tap the call button. They do not see your delivery address.</p></article>
+  </div>
+  <div class="notice notice-info"><strong>Please note:</strong> The QR sticker does not track GPS location, guarantee an emergency response, or replace official emergency services.</div>
+  <div class="center"><a class="btn btn-primary" href="{{ url_for('order') }}">Order your sticker · ₹400</a></div>
+</section>
+{% endblock %}

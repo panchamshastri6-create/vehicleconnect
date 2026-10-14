@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Order a QR Sticker | {{ business_name }}{% endblock %}
+{% block content %}
+<section class="page-hero compact"><div class="container"><div class="eyebrow">PERSONALIZED FOR YOUR VEHICLE</div><h1>Order your QR sticker</h1><p>Fill in your details. We'll use your address only to deliver your order.</p></div></section>
+<section class="section container order-layout">
+  <form class="form-card" method="post" action="{{ url_for('order') }}">
+    <h2>Your details</h2>
+    <div class="form-grid">
+      <label class="field full">Full name <span>*</span><input name="full_name" required maxlength="150" value="{{ (form_data or {}).get('full_name','') }}" placeholder="Enter your full name"></label>
+      <label class="field">Mobile number <span>*</span><input name="mobile" required inputmode="tel" maxlength="16" value="{{ (form_data or {}).get('mobile','') }}" placeholder="10-digit mobile number"></label>
+      <label class="field">WhatsApp number <small>Optional</small><input name="whatsapp" inputmode="tel" maxlength="16" value="{{ (form_data or {}).get('whatsapp','') }}" placeholder="If different"></label>
+      <label class="field full">Complete delivery address <span>*</span><textarea name="address" required minlength="8" rows="3" placeholder="House/flat, street, landmark">{{ (form_data or {}).get('address','') }}</textarea><small>Kept private; not displayed on your QR page.</small></label>
+      <label class="field">Area / locality<input name="locality" value="{{ (form_data or {}).get('locality','') }}" placeholder="Area"></label>
+      <label class="field">City <span>*</span><input name="city" required value="{{ (form_data or {}).get('city','Ahmedabad') }}" placeholder="City"></label>
+      <label class="field">State <span>*</span><input name="state" required value="{{ (form_data or {}).get('state','Gujarat') }}" placeholder="State"></label>
+      <label class="field">PIN code <span>*</span><input name="pincode" required inputmode="numeric" pattern="[0-9]{6}" maxlength="6" value="{{ (form_data or {}).get('pincode','') }}" placeholder="6-digit PIN code"></label>
+      <label class="field">Vehicle type <span>*</span><select name="vehicle_type" required><option value="">Choose vehicle</option>{% for v in ['Car','Motorcycle','Scooter','Other'] %}<option {% if (form_data or {}).get('vehicle_type')==v %}selected{% endif %}>{{ v }}</option>{% endfor %}</select></label>
+      <label class="field">Vehicle registration <small>Optional</small><input name="vehicle_registration" value="{{ (form_data or {}).get('vehicle_registration','') }}" placeholder="e.g. GJ01AB1234"></label>
+      <label class="field">Quantity <span>*</span><select name="quantity" id="quantity">{% for q in range(1,11) %}<option value="{{ q }}" {% if (form_data or {}).get('quantity','1')|string==q|string %}selected{% endif %}>{{ q }}</option>{% endfor %}</select></label>
+    </div>
+    <div class="consent-box">
+      <label class="check-line"><input type="checkbox" name="public_consent" required><span>I agree that my name and mobile number may be shown to anyone who scans my active QR sticker. I understand that my delivery address will not be shown publicly. I can request deactivation or removal.</span></label>
+      <label class="check-line"><input type="checkbox" name="whatsapp_consent"><span>If I provided a WhatsApp number, I consent to showing a WhatsApp contact button on my QR page.</span></label>
+    </div>
+    <h2 class="form-subhead">Payment method</h2>
+    <div class="payment-options">
+      <label class="payment-option"><input type="radio" name="payment_method" value="COD" checked><span><b>Cash on Delivery</b><small>Pay when the order arrives.</small></span><strong>COD</strong></label>
+      <label class="payment-option"><input type="radio" name="payment_method" value="RAZORPAY"><span><b>Online payment</b><small>Secure checkout via Razorpay, when configured.</small></span><strong>UPI / Card</strong></label>
+    </div>
+    <button class="btn btn-primary btn-block" type="submit">Place my order <span>→</span></button>
+    <p class="form-legal">By placing an order, you confirm that the provided information is accurate.</p>
+  </form>
+  <aside class="order-summary">
+    <div class="summary-top"><span class="summary-icon">▦</span><div><h3>Your sticker</h3><p>Personalized vehicle QR</p></div></div>
+    <div class="summary-product"><div class="summary-qr">▦</div><div><b>Vehicle QR sticker</b><small>Car, bike or scooter</small></div></div>
+    <div class="summary-row"><span>Price per sticker</span><b>₹{{ price }}</b></div>
+    <div class="summary-row"><span>Quantity</span><b id="summary-qty">1</b></div>
+    <div class="summary-row"><span>Delivery</span><b>Calculated by PIN</b></div>
+    <div class="summary-total"><span>Product subtotal</span><strong id="summary-total">₹{{ price }}</strong></div>
+    <div class="notice notice-info small-notice">Free delivery is configured only for eligible Ahmedabad PIN codes. The final delivery charge is confirmed after your address is checked.</div>
+    <div class="summary-points"><span>✓ Unique QR profile</span><span>✓ Print-ready sticker</span><span>✓ Address kept private</span></div>
+  </aside>
+</section>
+<script>
+const price = {{ price }};
+const quantity = document.getElementById('quantity');
+function updateSummary(){const q=Number(quantity.value||1);document.getElementById('summary-qty').textContent=q;document.getElementById('summary-total').textContent='₹'+(q*price).toLocaleString('en-IN');}
+quantity.addEventListener('change',updateSummary);updateSummary();
+</script>
+{% endblock %}
