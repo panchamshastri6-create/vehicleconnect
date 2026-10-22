@@ -89,13 +89,21 @@ def create_app():
             session["csrf_token"] = secrets.token_urlsafe(32)
         return {"csrf_token": session["csrf_token"]}
 
-    def db():
-        return pymysql.connect(
-            host=app.config["MYSQL_HOST"], port=app.config["MYSQL_PORT"],
-            user=app.config["MYSQL_USER"], password=app.config["MYSQL_PASSWORD"],
-            database=app.config["MYSQL_DATABASE"], charset="utf8mb4",
-            cursorclass=DictCursor, autocommit=False
-        )
+    
+def db():
+    return pymysql.connect(
+        host=app.config["MYSQL_HOST"],
+        port=app.config["MYSQL_PORT"],
+        user=app.config["MYSQL_USER"],
+        password=app.config["MYSQL_PASSWORD"],
+        database=app.config["MYSQL_DATABASE"],
+        charset="utf8mb4",
+        cursorclass=DictCursor,
+        autocommit=False,
+        ssl_verify_cert=True,
+        ssl_verify_identity=True,
+        ssl_ca="/etc/ssl/certs/ca-certificates.crt",
+    )
 
     def query_one(sql, args=()):
         conn = db()
