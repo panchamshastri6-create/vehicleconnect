@@ -1,5 +1,5 @@
 {% extends "admin/base.html" %}
 {% block title %}Admin login · {{ business_name }}{% endblock %}
 {% block content %}
-<div class="login-wrap"><form class="form-card login-card" method="post"><div class="eyebrow">PRIVATE ADMIN AREA</div><h1>Welcome back</h1><p>Sign in to manage customers, orders and QR profiles.</p><label class="field">Username<input name="username" required autocomplete="username"></label><label class="field">Password<input name="password" type="password" required autocomplete="current-password"></label><button class="btn btn-primary btn-block">Sign in</button><small>Admin accounts are created using <code>python create_admin.py</code>.</small></form></div>
+<div class="login-wrap"><form class="form-card login-card" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><div class="eyebrow">PRIVATE ADMIN AREA</div><h1>Welcome back</h1><p>Sign in to manage customers, orders and QR profiles.</p><label class="field">Username<input name="username" required autocomplete="username"></label><label class="field">Password<input name="password" type="password" required autocomplete="current-password"></label><button class="btn btn-primary btn-block">Sign in</button><small>Admin accounts are created using <code>python create_admin.py</code>.</small></form></div>
 {% endblock %}

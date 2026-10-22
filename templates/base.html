@@ -4,8 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{{ business_name }}{% endblock %}</title>
-  <meta name="description" content="Personalized vehicle QR contact stickers for cars and bikes.">
+  <meta name="description" content="VehicleScan — personalized vehicle QR contact stickers for cars and bikes.">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <meta name="theme-color" content="#102a43">
 </head>
 <body>
 <header class="site-header">
@@ -15,7 +16,7 @@
     <nav class="nav-links">
       <a href="{{ url_for('how_it_works') }}">How it works</a>
       <a href="{{ url_for('track_order') }}">Track order</a>
-      <a class="nav-cta" href="{{ url_for('order') }}">Order sticker · ₹400</a>
+      <a class="nav-cta" href="{{ url_for('order') }}">Explore stickers</a>
     </nav>
   </div>
 </header>
@@ -33,7 +34,7 @@
   <div class="container footer-grid">
     <div><a class="brand footer-brand" href="{{ url_for('home') }}"><span class="brand-mark">V</span><span>{{ business_name }}</span></a><p>Simple contact access for your vehicle, one scan at a time.</p></div>
     <div><strong>Explore</strong><a href="{{ url_for('how_it_works') }}">How it works</a><a href="{{ url_for('track_order') }}">Track order</a><a href="{{ url_for('order') }}">Order sticker</a></div>
-    <div><strong>Policies</strong><a href="{{ url_for('home') }}#privacy">Privacy-first design</a><a href="{{ url_for('admin_login') }}">Admin login</a></div>
+    <div><strong>Policies</strong><a href="{{ url_for('home') }}#privacy">Privacy-first design</a></div>
   </div>
   <div class="container footer-bottom">© {{ business_name }} · Built for responsible vehicle-owner contact.</div>
 </footer>

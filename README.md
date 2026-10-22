@@ -1,4 +1,4 @@
-# VehicleConnect QR — Local Windows Starter
+# VehicleScan — Local Windows Starter
 
 A Flask + MySQL starter for a vehicle QR-sticker business. It includes a public storefront, manual admin customer entry, unique QR profiles, print-ready QR PNG/PDF, order management, COD, optional Razorpay checkout, and partner commission tracking.
 
@@ -21,9 +21,9 @@ A Flask + MySQL starter for a vehicle QR-sticker business. It includes a public 
 
 ## 1. Extract the ZIP
 
-Extract `vehicleconnect-qr.zip` to a folder, for example:
+Extract `vehiclescan.zip` to a folder, for example:
 
-`C:\Users\YOURNAME\Downloads\vehicleconnect-qr`
+`C:\Users\YOURNAME\Downloads\vehiclescan`
 
 Open PowerShell in that folder.
 
@@ -150,3 +150,23 @@ Before public launch:
 - Add database backups, monitoring, log rotation, and a privacy/consent request process.
 - Add CSRF protection and rate limiting at the production edge/application layer before launch.
 - Conduct a security review. Do not run Flask's debug server on a public interface.
+
+
+## Production security notes
+- Set a long random `FLASK_SECRET_KEY` in Render environment variables. Never use the development fallback in production.
+- Set `BUSINESS_NAME=VehicleScan`, `BASE_URL=https://your-domain.in`, and `SESSION_COOKIE_SECURE=1` after HTTPS is active.
+- CSRF checks, per-worker login attempt throttling, security headers and safer session cookies reduce risk but cannot guarantee a website is impossible to hack. Keep dependencies updated, use a restricted database account, and back up the database.
+- Payment QR uploads are stored in the `app_settings` table. They survive app restarts only if the database itself is persistent. UPI QR transfers are not automatically verified.
+- Existing customer records and QR IDs are retained. Revoking a QR sets its active flag to 0; the old sticker URL returns an inactive page.
+- Additive startup migrations create settings/delivery tables and add delivery tracking columns; back up the database before deployment.
+
+
+## VehicleScan security and society update
+
+- This update adds an additive `societies` table and nullable `customers.society_id` column. Existing customer rows and `qr_profiles.public_id` values are preserved; existing customers remain `Unassigned` until you assign them manually.
+- Database startup migration is additive. Back up MySQL before deploying any code update.
+- Set `FLASK_SECRET_KEY` in Render to a long random value (at least 32 random bytes). Do not use the `.env.example` placeholder.
+- Keep `SESSION_COOKIE_SECURE=1` for HTTPS production.
+- Disabling a QR keeps its database record and public ID for audit/history; the old QR URL returns the inactive page/404 and no longer exposes the profile. This is safer than hard-deleting records.
+- The marketing homepage no longer displays the sticker price. Checkout still calculates order totals from `PRODUCT_PRICE`; change this environment variable only if you intend to change actual order pricing.
+- Do not commit `.env`, database exports, production customer data, or credentials.

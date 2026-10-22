@@ -1,4 +1,4 @@
-VEHICLECONNECT QR — PERMANENT CLOUD DEPLOYMENT
+VEHICLESCAN — PERMANENT CLOUD DEPLOYMENT
 ==============================================
 
 What this package does

@@ -4,7 +4,7 @@
 <section class="section container narrow">
   <div class="form-card">
     <div class="eyebrow">ORDER SUPPORT</div><h1>Track your order</h1><p>Enter your order number and the mobile number used at checkout.</p>
-    <form method="post">
+    <form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token }}">
       <label class="field">Order number<input name="order_number" required placeholder="e.g. VC261012ABC123"></label>
       <label class="field">Mobile number<input name="mobile" required inputmode="tel" placeholder="Mobile number used for the order"></label>
       <button class="btn btn-primary btn-block" type="submit">Find my order</button>
@@ -16,6 +16,9 @@
       <div class="summary-row"><span>Payment</span><b>{{ result.payment_status }}</b></div>
       <div class="summary-row"><span>Quantity</span><b>{{ result.quantity }}</b></div>
       <div class="summary-row"><span>Total</span><b>₹{{ result.total_amount }}</b></div>
+      {% if result.delivery_partner %}<div class="summary-row"><span>Delivery partner</span><b>{{ result.delivery_partner }}</b></div>{% endif %}
+      {% if result.tracking_number %}<div class="summary-row"><span>Tracking number</span><b>{{ result.tracking_number }}</b></div>{% endif %}
+      {% if result.tracking_url_template and result.tracking_number %}<a class="btn btn-light btn-block" href="{{ result.tracking_url_template.replace('{tracking}', result.tracking_number|urlencode) }}" target="_blank" rel="noopener noreferrer">Track with courier →</a>{% endif %}
       <small>For changes or delivery questions, contact the business support number.</small>
     </div>
     {% endif %}

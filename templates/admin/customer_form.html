@@ -2,13 +2,14 @@
 {% block title %}Add customer · {{ business_name }}{% endblock %}
 {% block content %}
 <div class="admin-title-row"><div><div class="eyebrow">QUICK WORKFLOW</div><h1>Add customer</h1><p>Enter the details, confirm consent and generate a QR profile.</p></div><a class="btn btn-light" href="{{ url_for('admin_customers') }}">← Customers</a></div>
-<form class="form-card admin-form" method="post"><div class="form-grid">
+<form class="form-card admin-form" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><div class="form-grid">
 <label class="field">Full name <span>*</span><input name="full_name" required value="{{ d.get('full_name','') }}"></label>
 <label class="field">Mobile number <span>*</span><input name="mobile" required inputmode="tel" value="{{ d.get('mobile','') }}"></label>
 <label class="field">WhatsApp <small>Optional</small><input name="whatsapp" value="{{ d.get('whatsapp','') }}"></label>
 <label class="field full">Delivery address <span>*</span><textarea name="address" required rows="3">{{ d.get('address','') }}</textarea><small>Private admin-only field; never shown on QR page.</small></label>
 <label class="field">Area / locality<input name="locality" value="{{ d.get('locality','') }}"></label><label class="field">City <span>*</span><input name="city" value="{{ d.get('city','Ahmedabad') }}" required></label>
 <label class="field">State <span>*</span><input name="state" value="{{ d.get('state','Gujarat') }}" required></label><label class="field">PIN code <span>*</span><input name="pincode" pattern="[0-9]{6}" maxlength="6" value="{{ d.get('pincode','') }}" required></label>
+<label class="field">Society / community<select name="society_id"><option value="">Unassigned</option>{% for society in societies %}<option value="{{ society.id }}" {% if request.form.get('society_id') == society.id|string %}selected{% endif %}>{{ society.name }}</option>{% endfor %}</select><small>Create societies from the Societies menu.</small></label>
 <label class="field">Vehicle type<select name="vehicle_type">{% for v in ['Car','Motorcycle','Scooter','Other'] %}<option {% if d.get('vehicle_type')==v %}selected{% endif %}>{{ v }}</option>{% endfor %}</select></label><label class="field">Registration <small>Optional</small><input name="vehicle_registration" value="{{ d.get('vehicle_registration','') }}"></label>
 </div>
 <div class="consent-box"><label class="check-line"><input type="checkbox" name="public_consent" required><span>I confirm that the customer has explicitly agreed to display their name and mobile number on an active public QR page.</span></label><label class="check-line"><input type="checkbox" name="whatsapp_consent"><span>Customer separately agreed to display their WhatsApp contact button (only applies if a WhatsApp number is provided).</span></label></div>

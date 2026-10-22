@@ -9,7 +9,8 @@
     <div class="summary-row"><span>Quantity</span><b>{{ order.quantity }}</b></div>
     <div class="summary-row"><span>Total payable</span><b>₹{{ order.total_amount }}</b></div>
     <div class="summary-row"><span>Payment</span><b>{{ 'Cash on Delivery' if order.payment_method=='COD' else 'Online payment' }}</b></div>
-    <div class="notice notice-info">Your public QR profile is activated only after the order is confirmed/paid by the admin. This prevents unpaid or fraudulent orders from creating active profiles.</div>
+    {% if payment_qr_available and order.payment_status != 'PAID' %}<a class="btn btn-light btn-block" href="{{ url_for('payment_qr',order_number=order.order_number) }}">Pay online using UPI QR</a>{% endif %}
+    <div class="notice notice-info">Your public QR profile is activated only after the order is confirmed/paid by the admin. UPI QR payments must be verified by the business before activation.</div>
     <a class="btn btn-primary btn-block" href="{{ url_for('track_order') }}">Track your order</a>
     <a class="text-link" href="{{ url_for('home') }}">Back to home</a>
   </div>

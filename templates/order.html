@@ -3,7 +3,7 @@
 {% block content %}
 <section class="page-hero compact"><div class="container"><div class="eyebrow">PERSONALIZED FOR YOUR VEHICLE</div><h1>Order your QR sticker</h1><p>Fill in your details. We'll use your address only to deliver your order.</p></div></section>
 <section class="section container order-layout">
-  <form class="form-card" method="post" action="{{ url_for('order') }}">
+  <form class="form-card" method="post" action="{{ url_for('order') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <h2>Your details</h2>
     <div class="form-grid">
       <label class="field full">Full name <span>*</span><input name="full_name" required maxlength="150" value="{{ (form_data or {}).get('full_name','') }}" placeholder="Enter your full name"></label>

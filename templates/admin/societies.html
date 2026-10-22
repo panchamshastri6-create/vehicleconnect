@@ -1,0 +1,9 @@
+{% extends "admin/base.html" %}
+{% block title %}Societies · {{ business_name }}{% endblock %}
+{% block content %}
+<div class="admin-title-row"><div><div class="eyebrow">CUSTOMER GROUPS</div><h1>Societies</h1><p>Create a society or community, then assign customers and generate their QR stickers.</p></div><a class="btn btn-light" href="{{ url_for('admin_customers') }}">View customers</a></div>
+<div class="detail-grid">
+<section class="panel detail-panel"><h2>Create a society</h2><form method="post" class="admin-form"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><label class="field">Society / community name <span>*</span><input name="name" maxlength="150" required placeholder="e.g. Green Park Society"></label><label class="field">Area / locality <small>Optional</small><input name="locality" maxlength="150" placeholder="e.g. Bopal, Ahmedabad"></label><label class="field">Notes <small>Optional</small><textarea name="notes" maxlength="500" rows="3" placeholder="Internal notes only"></textarea></label><button class="btn btn-primary" type="submit">Create society →</button></form></section>
+<section class="panel detail-panel"><h2>Existing societies</h2><div class="table-wrap"><table><thead><tr><th>Society</th><th>Customers</th><th>Status</th></tr></thead><tbody>{% for s in societies %}<tr><td><b>{{ s.name }}</b><small>{{ s.locality or 'Locality not set' }}</small></td><td>{{ s.customer_count }}</td><td><span class="status-pill {{ 'status-good' if s.active else 'status-muted' }}">{{ 'Active' if s.active else 'Inactive' }}</span></td></tr>{% else %}<tr><td colspan="3" class="empty">No societies yet. Create your first one.</td></tr>{% endfor %}</tbody></table></div></section>
+</div>
+{% endblock %}

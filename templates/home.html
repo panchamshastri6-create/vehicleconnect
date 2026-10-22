@@ -8,7 +8,7 @@
       <h1>Your vehicle.<br><span>One scan.</span><br>Easy contact.</h1>
       <p class="hero-lead">A personalized QR sticker for your car, bike or scooter. Help people contact you when your vehicle needs attention.</p>
       <div class="hero-actions"><a class="btn btn-primary" href="{{ url_for('order') }}">Get your QR sticker <span>→</span></a><a class="btn btn-light" href="{{ url_for('how_it_works') }}">How it works</a></div>
-      <div class="hero-points"><span>✓ One-time price</span><span>✓ Easy to scan</span><span>✓ Your address stays private</span></div>
+      <div class="hero-points"><span>✓ Clear, simple ordering</span><span>✓ Easy to scan</span><span>✓ Your address stays private</span></div>
     </div>
     <div class="hero-visual">
       <div class="visual-label">YOUR PERSONAL VEHICLE QR</div>
@@ -23,7 +23,6 @@
         </div>
         <div class="sticker-footer"><span>PERSONALIZED QR</span><span>BLACK · WHITE · WEATHER-READY*</span></div>
       </div>
-      <div class="price-float"><small>ONE-TIME PRICE</small><strong>₹{{ price }}</strong><span>per sticker</span></div>
       <div class="visual-note">*Choose a suitable waterproof vinyl finish from your printer.</div>
     </div>
   </div>
@@ -37,7 +36,7 @@
     <article class="step-card"><span class="step-num">03</span><div class="step-icon">↗</div><h3>Get contacted</h3><p>A scan opens your contact page, where people can call you without seeing your home address.</p></article>
   </div>
 </section>
-<section class="product-band"><div class="container product-band-inner"><div><div class="eyebrow">ONE SIMPLE PRODUCT</div><h2>Make your vehicle easier to reach.</h2><p>One personalized QR sticker for your everyday drive.</p></div><div class="product-price"><strong>₹{{ price }}</strong><span>per sticker</span><a class="btn btn-primary" href="{{ url_for('order') }}">Order now →</a></div></div></section>
+<section class="product-band"><div class="container product-band-inner"><div><div class="eyebrow">ONE SIMPLE PRODUCT</div><h2>Make your vehicle easier to reach.</h2><p>One personalized QR sticker for your everyday drive.</p></div><div class="product-price"><a class="btn btn-primary" href="{{ url_for('order') }}">Get started →</a></div></div></section>
 <section class="section container faq-section" id="privacy">
   <div class="section-heading"><div class="eyebrow">GOOD TO KNOW</div><h2>Frequently asked questions</h2></div>
   <div class="faq-grid">
@@ -47,5 +46,5 @@
     <details><summary>Can I pay on delivery?</summary><p>Cash on Delivery is available where delivery can be fulfilled. Online payment appears when the business has configured its payment gateway.</p></details>
   </div>
 </section>
-<section class="bottom-cta"><div class="container bottom-cta-inner"><div><h2>Ready to make contact easier?</h2><p>Get your personalized vehicle QR sticker.</p></div><a class="btn btn-white" href="{{ url_for('order') }}">Order for ₹{{ price }} →</a></div></section>
+<section class="bottom-cta"><div class="container bottom-cta-inner"><div><h2>Ready to make contact easier?</h2><p>Get your personalized vehicle QR sticker.</p></div><a class="btn btn-white" href="{{ url_for('order') }}">Get started →</a></div></section>
 {% endblock %}

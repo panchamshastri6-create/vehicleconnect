@@ -16,6 +16,15 @@ CREATE TABLE IF NOT EXISTS partners (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS societies (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(150) NOT NULL UNIQUE,
+  locality VARCHAR(150) NULL,
+  notes VARCHAR(500) NULL,
+  active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE IF NOT EXISTS customers (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   full_name VARCHAR(150) NOT NULL,
@@ -28,6 +37,7 @@ CREATE TABLE IF NOT EXISTS customers (
   pincode VARCHAR(10) NOT NULL,
   vehicle_type VARCHAR(30) NOT NULL,
   vehicle_registration VARCHAR(30) NULL,
+  society_id BIGINT NULL,
   public_name_consent TINYINT(1) NOT NULL DEFAULT 0,
   public_phone_consent TINYINT(1) NOT NULL DEFAULT 0,
   whatsapp_consent TINYINT(1) NOT NULL DEFAULT 0,
@@ -35,7 +45,9 @@ CREATE TABLE IF NOT EXISTS customers (
   active TINYINT(1) NOT NULL DEFAULT 1,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  INDEX idx_customer_mobile (mobile)
+  INDEX idx_customer_mobile (mobile),
+  INDEX idx_customer_society (society_id),
+  CONSTRAINT fk_customer_society FOREIGN KEY (society_id) REFERENCES societies(id)
 );
 
 CREATE TABLE IF NOT EXISTS qr_profiles (

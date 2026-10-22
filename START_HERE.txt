@@ -1,4 +1,4 @@
-VEHICLECONNECT QR — START HERE
+VEHICLESCAN — START HERE
 
 1. Install Python 3.12 and MySQL.
 2. Run schema.sql in MySQL.

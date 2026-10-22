@@ -1,0 +1,29 @@
+VehicleScan — safe Render deployment checklist
+==============================================
+
+Before deploying
+- Download a MySQL backup from the database currently containing the real customer records.
+- Keep the existing Render service and vehiclescan.in DNS records. Do not delete/recreate the service.
+- Keep the same database and its credentials. This update only adds the societies table and a nullable customers.society_id column; existing customer IDs, QR public IDs, and QR URLs are not rewritten.
+
+Render Environment settings (Render Dashboard > vehicleconnect web service > Environment)
+- FLASK_SECRET_KEY: set a new long random secret (at least 32 random bytes). Do not paste it into public chats or commit it to GitHub.
+- BUSINESS_NAME: VehicleScan
+- BASE_URL: https://vehiclescan.in
+- SESSION_COOKIE_SECURE: 1
+- FLASK_DEBUG: 0
+- Keep MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE, and payment secrets unchanged unless you know the current values and have a verified backup.
+
+Deployment steps
+1. Deploy the updated project to the EXISTING Render service, not a new service.
+2. Wait for deployment to finish and check https://vehiclescan.in/health.
+3. Test the homepage, order page, admin login, customer directory, and an existing QR URL.
+4. In Admin > Societies, create each society. Assign new customers while creating them; open an existing customer to assign them to a society.
+5. Test QR disable on a test customer only. Confirm that disabled QR no longer displays customer details.
+6. Keep your database backup in a private location.
+
+Important notes
+- The marketing homepage and How It Works page no longer show the ₹400 sticker price. Checkout still shows the actual amount calculated by PRODUCT_PRICE so customers see what they will be charged.
+- Removing the Admin Login link from public navigation is not a substitute for authentication. /admin/login remains available by direct URL and is protected by login checks and CSRF.
+- This code improves common protections but cannot guarantee a site is impossible to hack. Keep dependencies updated and periodically review logs and backups.
+- If FLASK_SECRET_KEY is absent, the app uses a random temporary key; sessions may reset after restart. Set the environment variable on Render for stable, secure sessions.
